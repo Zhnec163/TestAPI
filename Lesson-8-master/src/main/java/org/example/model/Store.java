@@ -8,7 +8,7 @@ import java.util.List;
 public class Store{
 
     @SerializedName("id")
-    private int id;
+    private long id;
 
     @SerializedName("petId")
     private int petId;
@@ -25,11 +25,11 @@ public class Store{
     @SerializedName("complete")
     private boolean complete;
 
-    public void setId(int id){
+    public void setId(long id){
         this.id = id;
     }
 
-    public int getId(){
+    public long getId(){
         return id;
     }
 

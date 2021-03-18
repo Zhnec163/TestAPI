@@ -27,11 +27,11 @@ public class HomeTaskApiTest {
                 .log(LogDetail.ALL)
                 .build();
         RestAssured.filters(new ResponseLoggingFilter());
-        store.setId(4);
     }
 
     @Test
     public void testOrderCreation() {
+        store.setId(4L);
         given()
                 .body(store)
                 .when()
@@ -42,6 +42,7 @@ public class HomeTaskApiTest {
 
     @Test
     public void testOrderSearch() {
+        store.setId(4L);
         given()
                 .body(store)
                 .when()
@@ -58,22 +59,25 @@ public class HomeTaskApiTest {
     }
     @Test
     public void testDelete() {
+        Store actual =
         given()
                 .body(store)
                 .when()
                 .post("/store/order")
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .extract().body()
+                .as(Store.class);
 
         given()
-                .pathParam("orderId", store.getId())
+                .pathParam("orderId", actual.getId())
                 .when()
                 .delete("/store/order/{orderId}")
                 .then()
                 .statusCode(200);
 
         given()
-                .pathParam("orderId", store.getId())
+                .pathParam("orderId", actual.getId())
                 .when()
                 .get("/store/order/{orderId}")
                 .then()
