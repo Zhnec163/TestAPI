@@ -9,8 +9,6 @@ import org.example.model.Store;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-
 import static io.restassured.RestAssured.given;
 
 public class HomeTaskApiTest {
@@ -18,7 +16,7 @@ public class HomeTaskApiTest {
     Store store = new Store();
 
     @BeforeClass
-    public void prepare() throws IOException {
+    public void prepare(){
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .setBaseUri("https://petstore.swagger.io/v2/")
                 .addHeader("api_key", "1234")
@@ -31,7 +29,6 @@ public class HomeTaskApiTest {
 
     @Test
     public void testOrderCreation() {
-        store.setId(4L);
         given()
                 .body(store)
                 .when()
@@ -42,16 +39,18 @@ public class HomeTaskApiTest {
 
     @Test
     public void testOrderSearch() {
-        store.setId(4L);
+        Store actual =
         given()
                 .body(store)
                 .when()
                 .post("/store/order")
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .extract().body()
+                .as(Store.class);
 
         given()
-                .pathParam("orderId", store.getId())
+                .pathParam("orderId", actual.getId())
                 .when()
                 .get("/store/order/{orderId}")
                 .then()
